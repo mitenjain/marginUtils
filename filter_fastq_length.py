@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# Miten Jain
-# fastq_length.py
+# Miten Jain (miten@soe.ucsc.edu)
+# filter_fastq_length.py
 
 import sys, time, glob, os
 import numpy
@@ -29,8 +29,8 @@ def main(myCommandLine=None):
     t0 = time.time()
 
     #Parse the inputs args/options
-    parser = OptionParser(usage='usage: ./fastq_length.py --in ./fastq --low 0 --high  \
-                                        1000000', version='%prog 0.0.2')
+    parser = OptionParser(usage='usage: ./filter_fastq_length.py --in ./fastq --low 0 --high  \
+                                        1000000 --out out.fastq', version='%prog 0.0.1')
 
     #Options
     parser.add_option('--in', dest='infile', help='fastq file', default='')
