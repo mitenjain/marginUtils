@@ -69,7 +69,7 @@ def main(myCommandLine=None):
         len_list.append(length)
         if length > low_cut and length < high_cut: 
             count += 1
-            print >> outputFile, stanza[0], len(stanza[1])
+            print >> outputFile, stanza[0]
             print >> outputFile, stanza[1]
             print >> outputFile, stanza[2]
             print >> outputFile, stanza[3]
