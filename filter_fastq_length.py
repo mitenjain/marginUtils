@@ -33,13 +33,12 @@ def main(myCommandLine=None):
                                         1000000 --out out.fastq', version='%prog 0.0.1')
 
     #Options
-    parser.add_option('--in', dest='infile', help='fastq file', default='')
+    parser.add_option('--in', dest='infile', help='input fastq (required)', default='')
     parser.add_option('--low', dest='low', help='low read length cutoff', type=int, \
                         default=0)
     parser.add_option('--high', dest='high', help='high read length cutoff', type=int, \
                         default=100000)
-    parser.add_option('--out', dest='outfile', help='output fastq file', default=sys.stdout, \
-                        action='store_true')
+    parser.add_option('--out', dest='outfile', help='output fastq, default stdout', default='')
 
     #Parse the options/arguments
     options, args = parser.parse_args()
@@ -56,21 +55,29 @@ def main(myCommandLine=None):
     high_cut = int(options.high)
     outFile = options.outfile
 
+    if outFile == '':
+        outputFile = sys.stdout
+    else:
+        outputFile = open(outFile, 'w')
+
     slice_stats = []
     count = 0
     len_list = []
-    file = open(inFile, 'r')
-    for stanza in getStanza(file):
+    inputFile = open(inFile, 'r')
+    for stanza in getStanza(inputFile):
         length = len(stanza[1])
         len_list.append(length)
         if length > low_cut and length < high_cut: 
             count += 1
-            print >> sys.stdout, stanza[0], len(stanza[1])
-            print >> sys.stdout, stanza[1]
-            print >> sys.stdout, stanza[2]
-            print >> sys.stdout, stanza[3]
+            print >> outputFile, stanza[0], len(stanza[1])
+            print >> outputFile, stanza[1]
+            print >> outputFile, stanza[2]
+            print >> outputFile, stanza[3]
             slice_stats.append(len(stanza[1]))
-    file.close()
+    inputFile.close()
+
+    if not outputFile == sys.stdout:
+        outputFile.close()
 
     print >> sys.stderr, '# reads', '# bases', '# reads (slice)', '# bases (slice)', 'median length (slice)'
     print >> sys.stderr, len(len_list), numpy.sum(len_list), len(slice_stats), numpy.sum(slice_stats), numpy.median(slice_stats)
